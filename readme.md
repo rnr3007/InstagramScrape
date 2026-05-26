@@ -111,9 +111,10 @@ To do this task, I used Android 12 with HiOS, different device may have differen
 
 ## Extra Notes in the Implementation and Further Improvement
 1. The real mobile session can be simulated using Appium with the help of Android Studio's Android Emulator, however in this test I'm using my own mobile device due to the insufficient resource.
+Currently, I still find a way to dockerize the Appium part in order to "not installing anything again inside my PC". There are some trouble when connecting the real device to the Appium docker server because it needs more authorization for the USB port.
 
 2. Based on online reference, there are multiple factor that the app will check, .e.g: hardware, OS and firmware version, carrier data, network identity, usage pattern, sensor behavior, etc. 
-   We can implement some way to mimic a real device behavior as the way to 'rotate device fingerprint'.
+We can implement some way to mimic a real device behavior as the way to 'rotate device fingerprint'.
 
 3. Avoiding rate limit could be implemented by using random "pause" moment. Mimicking a real human behavior, i.e. when he/she is reading something or retrieving interesting data. This is also implemented in the code. Especially the code where I scripted the "typing" behavior, the program will sleep with rate between .25 to .5 second per letter typed
 
