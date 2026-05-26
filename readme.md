@@ -1,3 +1,7 @@
+# Project Overview
+This project will try to export instagram profile (username, full name, follower count, post count, and following count) into the .csv file.
+Use the API at `<hostname>/api/v1/:username` to retrieve and append the data.
+
 # Requirements
 ## Development Requirement
 + [ ] Java Development Kit (JDK) 18
