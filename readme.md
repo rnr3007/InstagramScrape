@@ -1,6 +1,7 @@
 # Project Overview
 This project will try to export instagram profile (username, full name, follower count, post count, and following count) into the .csv file.
 Use the API at `<hostname>/api/v1/:username` to retrieve and append the data.
+By default, the data will be stored inside `./instagram-scrape/output.csv`. However you can change it from the `.env` file.
 
 # Requirements
 ## Development Requirement
