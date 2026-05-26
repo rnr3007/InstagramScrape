@@ -18,10 +18,12 @@
    ```
    where javac
    ```
-   as the value.![[Pasted image 20260525080057.png]]
+   as the value.
+   <img width="714" height="216" alt="Pasted image 20260525080057" src="https://github.com/user-attachments/assets/21e5642d-d062-4250-99cc-dc78f5e12ab5" />
+
 
 ## 2. NodeJS 20.11.0
-1. If you're already having another version of nodeJs:
+1. Follow installation instruction from [here](https://nodejs.org/en/download), howewver if you're already having another version of NodeJs you can follow the steps below:
 	1. Install Node Version Manager (nvm), 
 	   this is a tool that will manage Node version inside your PC. This tool could be helpful if you have several different Node version to work with
 	   Find the suitable version for Windows from [here](https://github.com/coreybutler/nvm-windows/releases)
@@ -48,8 +50,10 @@ nvm use 20.11.0
 	3. Android SDK Platform-Tools
 	4. Android SDK Tools (obsolete)
 5. Download the SDK Tools that is not available, and then Apply
-6. Set the ANDROID_HOME environment variable as the installed path for Android SDK![[Pasted image 20260525075530.png]]
-7. Add the `platform-tools` from the ANDROID_HOME into the Path variable. This will enable command, i.e. `adb` in the whole command line![[Pasted image 20260525085430.png]]
+6. Set the ANDROID_HOME environment variable as the installed path for Android SDK<img width="1230" height="890" alt="Pasted image 20260525075530" src="https://github.com/user-attachments/assets/cc4c5c91-9c93-4eaf-abf6-58a41a671f98" />
+7. Add the `platform-tools` from the ANDROID_HOME into the Path variable. This will enable command, i.e. `adb` in the whole command line<img width="758" height="508" alt="Pasted image 20260525085430" src="https://github.com/user-attachments/assets/73257fee-cafc-43cb-8509-f8b141695ff3" />
+
+
 
 ## 4. Appium Installation and Setup
 1. Open command line and install appium using command:
@@ -102,7 +106,9 @@ To do this task, I used Android 12 with HiOS, different device may have differen
    appium -a 0.0.0.0 -p 4723 --allow-cors
    ```
    in command line to start appium. It will receive all request from any IP at port 4723 and allowing Cross-Originated Resource Sharing.
-3. Take a note for the appium server IP since you will need it to fill the .env value![[Pasted image 20260526134143.png]]
+3. Take a note for the appium server IP since you will need it to fill the .env value<img width="1077" height="218" alt="Pasted image 20260526134143" src="https://github.com/user-attachments/assets/d3760a8f-212c-41a6-82f6-ba6e1fed31f8" />
+
+
 ## Extra Notes in the Implementation and Further Improvement
 1. The real mobile session can be simulated using Appium with the help of Android Studio's Android Emulator, however in this test I'm using my own mobile device due to the insufficient resource.
 
