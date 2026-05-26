@@ -25,8 +25,7 @@ const capabilites = {
 const wdOpts = {
     hostname: process.env.APPIUM_HOST,
     port: parseInt(process.env.APPIUM_PORT, 10),
-    // path: '/wd/hub',
-    logLevel: 'trace',
+    logLevel: 'warn',
     capabilities: capabilites
 };
 
