@@ -17,9 +17,6 @@ const capabilites = {
     // Define the Device configuration, apps, and activity that will be used
     platformName: 'Android',
     'appium:automationName': 'UiAutomator2',
-    'appium:deviceName': DEVICE_ID,
-    'appium:appPackage': LAUNCHER_PKG,
-    'appium:appActivity': LAUNCHER_ACT,
     // Make use of the existing session instead of keep trying to log in into a new one
     'appium:noReset': true,
     // Make ease the searcing process
@@ -30,51 +27,61 @@ const capabilites = {
 
 // Configuration for the appium server along with its default value
 const wdOpts = {
-    host: process.env.APPIUM_HOST || 'localhost',
-    port: parseInt(process.env.APPIUM_PORT, 10) || 4723,
-    logLevel: 'warn',
+    hostname: process.env.APPIUM_HOST,
+    port: parseInt(process.env.APPIUM_PORT, 10),
+    // path: '/wd/hub',
+    logLevel: 'trace',
     capabilities: capabilites
 };
 
-
-async function run() {
-    // Initialize device driver
-    const driver = await remote(wdOpts);
-    
+function run() {    
     // Initialize API service to be consumed on port 3000
-    const serve = express();
-
-    serve.get('/api/v1/:username', (req, res) => {
-        try {
-            // Go to the home screen to open new Instagram instance
-            await goToHome(driver);
-            await goToHome(driver);
+    try {
+        console.log(wdOpts);
     
-            // Search instagram user
-            const username = req.params.username;
-            const result = await extractInstaUser(driver, username);
+        const serve = express();
     
-            // Close the app and back to home, make sure the home is really reached
-            await goToHome(driver);
-            await goToHome(driver);
+        serve.get('/api/v1/:username', async (req, res) => {
+            try {
+                // Initialize device driver
+                const driver = await remote(wdOpts);
     
-            if (!(result.err)) {
-                res.status(200).json({
-                    result
-                })
-            } else {
+                // Go to the home screen to open new Instagram instance
+                await goToHome(driver);
+                await goToHome(driver);
+        
+                // Search instagram user
+                const username = req.params.username;
+                const result = await extractInstaUser(driver, username);
+        
+                // Close the app and back to home, make sure the home is really reached
+                await goToHome(driver);
+                await goToHome(driver);
+        
+                if (!(result.err)) {
+                    res.status(200).json({
+                        result
+                    })
+                } else {
+                    res.status(500).json({
+                        result
+                    })
+                } 
+            } catch (e) {
                 res.status(500).json({
-                    result
+                    err: 'Error happened',
+                    errMsg: e.message
                 })
-            } 
-        } catch (e) {
-            res.status(500).json({
-                err: 'Error happened',
-                errMessage: e
-            })
-        }
-    })
-}
+            }
+        })
+    
+        serve.listen(API_PORT, () => {
+            console.log('Server is running');
+        })
+    } catch(e) {
+        console.log(e.message);
+    }
+};
 
-run().catch(console.error);
+run();
 

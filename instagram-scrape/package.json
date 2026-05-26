@@ -10,8 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^5.2.1",
     "dotenv": "^17.4.2",
+    "express": "^5.2.1",
     "webdriverio": "^8.11.2"
   }
 }

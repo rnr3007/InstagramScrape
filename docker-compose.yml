@@ -3,10 +3,11 @@ services:
   automator_app:
     container_name: automator_app
     build: .
-    env_file:
-      - ./instagram-scrape/.env
     volumes:
       - ./instagram-scrape:/usr/src/app
     ports:
+      # Port for the API service
       - "3000:3000"
+      # Port for the Appium server
+      - "4723:4723"
     

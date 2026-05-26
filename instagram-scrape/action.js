@@ -68,16 +68,15 @@ async function goBack(driver) {
  */
 async function extractInstaUser(driver, igusername = `rivarnr`) {
     let instagramIcon;
+    let result;
     
     try {
         // Tries to find instagram app
         while(true) {
-            await driver.getPageSource();
             instagramIcon = await driver.$(`//android.widget.TextView[@text="${APP_ID}"]`);
             
             if (instagramIcon) {
                 await instagramIcon.click();
-                await driver.getPageSource();
                 await sleep(crypto.randomInt(2000, 3000));
                 break;
             }
@@ -96,13 +95,11 @@ async function extractInstaUser(driver, igusername = `rivarnr`) {
     
         // Search the igusername
         await searchBox.sendKeys(igusername.split(""));
-        await driver.getPageSource();
         // Randomize value mimicking the human behavior when typing
         await sleep(crypto.randomInt(500, 1000) * igusername.length);
     
         // Go to the first match profile and wait for the data
-        await driver.$(`(//android.widget.ImageView[@resource-id="${APP_PKG}:id/row_search_avatar_in_ring"])[1]`)?.click();
-        await driver.getPageSource();
+        await driver.$(`(//androidx.recyclerview.widget.RecyclerView[@resource-id="${APP_PKG}:id/recycler_view"]/android.widget.Button[@resource-id="${APP_PKG}:id/row_search_user_container"])[1]`)?.click();
         await sleep(crypto.randomInt(1000, 2000));
     
         // Retrieve posts, followers, friends, 
@@ -117,7 +114,7 @@ async function extractInstaUser(driver, igusername = `rivarnr`) {
             username, fullname, posts, followers, friends, bio
         });
 
-        return {
+        result = {
             data: {
                 username,
                 fullname,
@@ -129,15 +126,17 @@ async function extractInstaUser(driver, igusername = `rivarnr`) {
         }
     }
     catch (e) {
-        return {
+        result = {
             err: 'Error happened',
-            errMessage: e
+            errMsg: e.message
         }
     }
-    
-    // Back to Home
+
+    // Back to Instagram Home
     await goBack(driver);
     await goBack(driver);
+
+    return result;
 }
 
 module.exports = {simulateScroll, goToHome, extractInstaUser};
