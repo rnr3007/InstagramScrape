@@ -7,10 +7,6 @@ const {goToHome, extractInstaUser} = require('./action');
 const {execSync} = require('child_process');
 
 const API_PORT = process.env.API_PORT;
-const DEVICE_ID = process.env.ANDROID_ID;
-const ANDROID_LAUNCHER = process.env.ANDROID_DEFAULT_LAUNCHER.toString().match(/\{([^}]+)\}/)[1];
-const LAUNCHER_PKG = ANDROID_LAUNCHER.split('/')[0];
-const LAUNCHER_ACT = `.${ANDROID_LAUNCHER.split('\.').at(-1)}`;
 
 // Configure the capability for the webdriver
 const capabilites = {
@@ -36,9 +32,7 @@ const wdOpts = {
 
 function run() {    
     // Initialize API service to be consumed on port 3000
-    try {
-        console.log(wdOpts);
-    
+    try {    
         const serve = express();
     
         serve.get('/api/v1/:username', async (req, res) => {

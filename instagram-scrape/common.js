@@ -22,4 +22,18 @@ function writeCsvRow(path, data, delimiter = ";") {
     fs.appendFileSync(path, Object.values(data).join(delimiter) + '\n');
 }
 
-module.exports = { sleep, writeCsvRow };
+/**
+ * 
+ * @param {()} func 
+ * @param {()} catchFunc 
+ * @returns 
+ */
+async function tryCatch(func) {
+    try {
+        return [await func(), undefined];
+    } catch (e) {
+        return [null, e];
+    }
+};
+
+module.exports = { sleep, writeCsvRow, tryCatch };

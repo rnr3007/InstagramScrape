@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const {sleep, writeCsvRow} = require('./common');
+const {sleep, writeCsvRow, tryCatchAsync} = require('./common');
 const fs = require('fs');
 const crypto = require('crypto');
 
@@ -96,34 +96,50 @@ async function extractInstaUser(driver, igusername = `rivarnr`) {
         // Search the igusername
         await searchBox.sendKeys(igusername.split(""));
         // Randomize value mimicking the human behavior when typing
-        await sleep(crypto.randomInt(500, 1000) * igusername.length);
+        await sleep(crypto.randomInt(250, 500) * igusername.length);
     
         // Go to the first match profile and wait for the data
         await driver.$(`(//androidx.recyclerview.widget.RecyclerView[@resource-id="${APP_PKG}:id/recycler_view"]/android.widget.Button[@resource-id="${APP_PKG}:id/row_search_user_container"])[1]`)?.click();
         await sleep(crypto.randomInt(1000, 2000));
     
         // Retrieve posts, followers, friends, 
-        const username = await (await driver.$(`//android.widget.TextView[@resource-id="${APP_PKG}:id/action_bar_title"]`))?.getText();
-        const fullname = await (await driver.$(`//android.widget.TextView[@resource-id="${APP_PKG}:id/profile_header_full_name_above_vanity"]`))?.getText();
-        const posts = await (await driver.$(`//android.widget.TextView[@resource-id="${APP_PKG}:id/profile_header_familiar_post_count_value"]`))?.getText();
-        const followers = await (await driver.$(`//android.widget.TextView[@resource-id="${APP_PKG}:id/profile_header_familiar_followers_value"]`))?.getText();
-        const friends = await (await driver.$(`//android.widget.TextView[@resource-id="${APP_PKG}:id/profile_header_familiar_following_value"]`))?.getText();
-        const bio = await (await driver.$(`//com.facebook.compose.view.MetaComposeView[@resource-id="${APP_PKG}:id/profile_user_info_compose_view"]/android.view.View/android.view.View/android.widget.TextView`))?.getText();
-    
-        writeCsvRow(process.env.OUTPUT_FILE, {
-            username, fullname, posts, followers, friends, bio
-        });
-
-        result = {
-            data: {
-                username,
-                fullname,
-                posts,
-                followers,
-                friends,
-                bio
-            }
+        const username = await (async () => {
+            try { return await (await driver.$(`//android.widget.TextView[@resource-id="${APP_PKG}:id/action_bar_title"]`)).getText(); } 
+            catch { return null; }
+        })();
+        const fullname = await (async () => {
+            try { return await (await driver.$(`//android.widget.TextView[@resource-id="${APP_PKG}:id/profile_header_full_name_above_vanity"]`))?.getText();}
+            catch { return null; }
+        })();        
+        const posts = await (async () => {
+            try { return await (await driver.$(`//android.widget.TextView[@resource-id="${APP_PKG}:id/profile_header_familiar_post_count_value"]`))?.getText();}
+            catch { return null; }
+        })();
+        const followers = await (async () => {
+            try { return await (await driver.$(`//android.widget.TextView[@resource-id="${APP_PKG}:id/profile_header_familiar_followers_value"]`))?.getText();}
+            catch { return null; }
+        })();        
+        const friends = await (async () => {
+            try { return await (await driver.$(`//android.widget.TextView[@resource-id="${APP_PKG}:id/profile_header_familiar_following_value"]`))?.getText();}
+            catch { return null; }
+        })();        
+        const bio = await (async () => {
+            try { return await (await driver.$(`//com.facebook.compose.view.MetaComposeView[@resource-id="${APP_PKG}:id/profile_user_info_compose_view"]/android.view.View/android.view.View/android.widget.TextView`))?.getText();}
+            catch { return null; }
+        })();
+        
+        const data = {
+            username,
+            fullname,
+            posts,
+            followers,
+            friends,
+            bio: bio.replaceAll('\n', ' ')
         }
+
+        writeCsvRow(process.env.OUTPUT_FILE, data);
+
+        result = {data}
     }
     catch (e) {
         result = {
